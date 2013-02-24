@@ -1,5 +1,5 @@
 {
-  "name": "toml-parser",
+  "name": "node-toml",
   "description": "TOML parser",
   "version": "0.1.0",
   "main": "index.js",
