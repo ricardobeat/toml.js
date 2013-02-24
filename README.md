@@ -14,3 +14,7 @@ Parser implementation for [TOML](https://github.com/mojombo/toml).
 ### Tests
 
 `npm test` or `mocha`
+
+### Todo
+
+- nested lists
