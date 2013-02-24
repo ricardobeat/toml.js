@@ -7,7 +7,7 @@
   };
 
   toml = function(input) {
-    var accum, char, context, count, delimiters, eat, group, i, ignore, key, list, newlines, part, prev, quotes, root, skip, state, token, value, values, whitespace, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+    var accum, char, context, count, delimiters, eat, group, i, ignore, key, list, lists, nesting, newlines, part, prev, quotes, root, skip, state, token, value, values, whitespace, _i, _j, _len, _len1, _ref, _ref1, _ref2;
     root = {};
     context = root;
     newlines = "\n\r";
@@ -24,6 +24,8 @@
     key = null;
     value = null;
     list = null;
+    lists = {};
+    nesting = -1;
     prev = null;
     eat = function(char, reg, st) {
       if (!reg.test(char)) {
@@ -39,9 +41,6 @@
     _ref = input.toString() + "\n";
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       char = _ref[i];
-      if (toml.debug) {
-        console.log(char, state);
-      }
       if (--skip > 0) {
         continue;
       }
@@ -98,12 +97,12 @@
         }
         if (char === 't' && input.slice(i, +(i + 3) + 1 || 9e9) === 'true') {
           value = true;
-          skip = 3;
+          skip = 4;
           state = null;
         }
         if (char === 'f' && input.slice(i, +(i + 4) + 1 || 9e9) === 'false') {
           value = false;
-          skip = 4;
+          skip = 5;
           state = null;
         }
         if (char === '-') {
@@ -115,7 +114,7 @@
           state = 'number';
         }
         if (char === '[') {
-          list = [];
+          list = lists[++nesting] = [];
           continue;
         }
       }
@@ -138,7 +137,7 @@
         }
       }
       if (list != null) {
-        if (value) {
+        if (value != null) {
           list.push(value);
           value = null;
           state = 'expect_value';
@@ -147,9 +146,16 @@
           continue;
         }
         if (char === ']') {
-          value = list;
-          list = null;
-          state = null;
+          if (nesting === 0) {
+            value = list;
+            list = null;
+            nesting = -1;
+            state = null;
+          }
+          if (nesting > 0) {
+            lists[--nesting].push(list);
+            list = lists[nesting];
+          }
         }
       }
       if (key && (value != null)) {

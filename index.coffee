@@ -22,6 +22,8 @@ toml = (input) ->
     key   = null
     value = null
     list  = null
+    lists = {}
+    nesting = -1
 
     prev = null
 
@@ -30,7 +32,6 @@ toml = (input) ->
         else accum += char; no
 
     for char, i in input.toString() + "\n"
-        console.log char,state if toml.debug
         continue if --skip > 0
 
         if not state and char in newlines then state = 'newline'
@@ -66,15 +67,15 @@ toml = (input) ->
             if char in quotes then state = 'string'; continue
 
             # Boolean
-            if char is 't' and input[i..i+3] is 'true' then value = true; skip = 3; state = null
-            if char is 'f' and input[i..i+4] is 'false' then value = false; skip = 4; state = null
+            if char is 't' and input[i..i+3] is 'true' then value = true; skip = 4; state = null
+            if char is 'f' and input[i..i+4] is 'false' then value = false; skip = 5; state = null
 
             # Number
             if char is '-' then state = 'number'; accum = '-'; continue
             if isNumeric char then state = 'number'
 
             # Array
-            if char is '[' then list = []; continue
+            if char is '[' then list = lists[++nesting] = []; continue
 
         if state is 'string' and eat(char, /[^"']/)               then value = token.replace(/\\n/, "\n")
         if state is 'number' and eat(char, /[\d.]/, 'number_end') then value = +token
@@ -86,9 +87,11 @@ toml = (input) ->
             else state = null
 
         if list? # Capture values
-            if value then list.push(value); value = null; state = 'expect_value'
+            if value? then list.push(value); value = null; state = 'expect_value'
             if char is ',' then continue
-            if char is ']' then value = list; list = null; state = null
+            if char is ']'
+                if nesting is 0 then value = list; list = null; nesting = -1; state = null
+                if nesting > 0 then lists[--nesting].push list; list = lists[nesting]
 
         if key and value?
             context[key] = value

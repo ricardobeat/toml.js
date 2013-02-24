@@ -34,6 +34,13 @@ expected =
         string: "this is a \nmultiline string"
         array: [1,2,3]
         array2: [1,2,3,4,5,6]
+    nested:
+        a: [[1,2], [3,4]]
+        b: [
+            ["a", "b", "c"]
+            [true, false]
+            [[1], [2]]
+        ]
 
 it 'should work', ->
 
