@@ -1,0 +1,23 @@
+{
+  "name": "toml-parser",
+  "description": "TOML parser",
+  "version": "0.1.0",
+  "main": "index.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "flour": "",
+    "mocha": "",
+    "coffee-script": "~1.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "watch": "cake watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ricardobeat/toml.git"
+  },
+  "author": "Ricardo Tomasi",
+  "license": "MIT (ricardo.mit-license.org)"
+}
