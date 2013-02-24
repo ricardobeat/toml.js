@@ -25,6 +25,7 @@ expected =
         beta:
             ip: "10.0.0.2"
             dc: "eqdc10"
+            hyper: long: nested: stuff: false: false
 
 it 'should work', ->
 

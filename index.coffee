@@ -88,7 +88,7 @@ module.exports = (input) ->
             if char is ',' then continue
             if char is ']' then value = list; list = null; state = null
 
-        if key and value
+        if key and value?
             context[key] = value
             key = value = null
 
