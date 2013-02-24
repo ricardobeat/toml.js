@@ -41,8 +41,10 @@ expected =
             [true, false]
             [[1], [2]]
         ]
+    escaped:
+        string: "I'm a string. \"You can quote me\". Tab \t newline \n you get it."
 
-it 'should work', ->
+it.only 'should work', ->
 
     res = toml doc
     assert.equal JSON.stringify(res), JSON.stringify(expected)

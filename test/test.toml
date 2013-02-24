@@ -52,3 +52,6 @@ b = [
   , [true, false]
   , [[1], [2]]
 ]
+
+[escaped]
+string = "I'm a string. \"You can quote me\". Tab \t newline \n you get it."

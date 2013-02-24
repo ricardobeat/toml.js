@@ -1,5 +1,11 @@
 isNumeric = (n) -> not isNaN parseInt(n, 10)
 
+unescape = (str) ->
+    str
+        .replace('\\n', "\n")
+        .replace('\\t', "\t")
+        .replace(/\\(["'])/, "$1")
+
 toml = (input) ->
 
     root = {}
@@ -25,6 +31,8 @@ toml = (input) ->
     lists = {}
     nesting = -1
 
+    quote = null
+
     prev = null
 
     eat = (char, reg, st) ->
@@ -33,6 +41,8 @@ toml = (input) ->
 
     for char, i in input.toString() + "\n"
         continue if --skip > 0
+
+        console.log char, state if toml.debug
 
         if not state and char in newlines then state = 'newline'
 
@@ -64,7 +74,7 @@ toml = (input) ->
 
         if state is 'expect_value'
             # String
-            if char in quotes then state = 'string'; continue
+            if char in quotes then state = 'string'; quote = char; continue
 
             # Boolean
             if char is 't' and input[i..i+3] is 'true' then value = true; skip = 4; state = null
@@ -77,9 +87,14 @@ toml = (input) ->
             # Array
             if char is '[' then list = lists[++nesting] = []; continue
 
-        if state is 'string' and eat(char, /[^"']/)               then value = token.replace(/\\n/, "\n")
+        if state is 'string' and eat(char, /[^"']/, 'string_end') then value = unescape token
         if state is 'number' and eat(char, /[\d.]/, 'number_end') then value = +token
         if state is 'date'   and eat(char, /[\d-:TZ]/)            then value = new Date(token)
+
+        # Escaped quotes
+        if state is 'string_end'
+            if char isnt quote or (char is quote and prev is '\\') then state = 'string'; accum = value + char; value = null
+            else state = null; quote = null
 
         # Date literal
         if state is 'number_end'

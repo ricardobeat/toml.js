@@ -1,13 +1,17 @@
 (function() {
-  var isNumeric, toml,
+  var isNumeric, toml, unescape,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   isNumeric = function(n) {
     return !isNaN(parseInt(n, 10));
   };
 
+  unescape = function(str) {
+    return str.replace('\\n', "\n").replace('\\t', "\t").replace(/\\(["'])/, "$1");
+  };
+
   toml = function(input) {
-    var accum, char, context, count, delimiters, eat, group, i, ignore, key, list, lists, nesting, newlines, part, prev, quotes, root, skip, state, token, value, values, whitespace, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+    var accum, char, context, count, delimiters, eat, group, i, ignore, key, list, lists, nesting, newlines, part, prev, quote, quotes, root, skip, state, token, value, values, whitespace, _i, _j, _len, _len1, _ref, _ref1, _ref2;
     root = {};
     context = root;
     newlines = "\n\r";
@@ -26,6 +30,7 @@
     list = null;
     lists = {};
     nesting = -1;
+    quote = null;
     prev = null;
     eat = function(char, reg, st) {
       if (!reg.test(char)) {
@@ -43,6 +48,9 @@
       char = _ref[i];
       if (--skip > 0) {
         continue;
+      }
+      if (toml.debug) {
+        console.log(char, state);
       }
       if (!state && __indexOf.call(newlines, char) >= 0) {
         state = 'newline';
@@ -93,6 +101,7 @@
       if (state === 'expect_value') {
         if (__indexOf.call(quotes, char) >= 0) {
           state = 'string';
+          quote = char;
           continue;
         }
         if (char === 't' && input.slice(i, +(i + 3) + 1 || 9e9) === 'true') {
@@ -118,14 +127,24 @@
           continue;
         }
       }
-      if (state === 'string' && eat(char, /[^"']/)) {
-        value = token.replace(/\\n/, "\n");
+      if (state === 'string' && eat(char, /[^"']/, 'string_end')) {
+        value = unescape(token);
       }
       if (state === 'number' && eat(char, /[\d.]/, 'number_end')) {
         value = +token;
       }
       if (state === 'date' && eat(char, /[\d-:TZ]/)) {
         value = new Date(token);
+      }
+      if (state === 'string_end') {
+        if (char !== quote || (char === quote && prev === '\\')) {
+          state = 'string';
+          accum = value + char;
+          value = null;
+        } else {
+          state = null;
+          quote = null;
+        }
       }
       if (state === 'number_end') {
         if (char === '-') {
