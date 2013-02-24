@@ -50,6 +50,14 @@ Values are interpreted as `String`, `Number`, `Date`, `Array` and `Object` insta
 
 See `Cakefile` for the build/watch tasks.
 
+### Performance
+
+Benchmark using `test/test.toml`:
+
+    TOMLjs: 5ms
+    toml: 8ms (fails to parse the key 'false')
+    toml-parser: 17ms (fails on deeply nested keys)
+
 ### Test
 
 Run `npm test` or `mocha` on the root folder.
