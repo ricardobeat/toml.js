@@ -58,11 +58,11 @@
           state = 'newline';
         }
       }
-      if (__indexOf.call(newlines, prev) >= 0 && __indexOf.call(whitespace, char) >= 0) {
-        state = 'whitespace';
+      if ((state === 'whitespace' || state === 'expect_value') && __indexOf.call(whitespace, char) >= 0) {
         continue;
       }
-      if ((state === 'whitespace' || state === 'expect_value') && __indexOf.call(whitespace, char) >= 0) {
+      if (__indexOf.call(newlines, prev) >= 0 && __indexOf.call(whitespace, char) >= 0) {
+        state = 'whitespace';
         continue;
       }
       if (__indexOf.call(ignore, state) >= 0 && char === '[') {

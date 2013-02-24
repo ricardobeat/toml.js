@@ -41,8 +41,8 @@ toml = (input) ->
             if char not in newlines then continue else state = 'newline'
 
         # Strip whitespace
-        if prev in newlines and char in whitespace then state = 'whitespace'; continue
         if state in ['whitespace', 'expect_value'] and char in whitespace then continue
+        if prev in newlines and char in whitespace then state = 'whitespace'; continue
 
         # Group
         if state in ignore and char is '[' then state = 'group'; continue

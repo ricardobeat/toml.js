@@ -30,6 +30,10 @@ expected =
         mi_nus: -10
         float: 0.877
         log: -1.374
+    multiline:
+        string: "this is a \nmultiline string"
+        array: [1,2,3]
+        array2: [1,2,3,4,5,6]
 
 it 'should work', ->
 
