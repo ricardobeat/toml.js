@@ -1,7 +1,7 @@
 TOML.js
 =======
 
-Javascript implementation of a [TOML](https://github.com/mojombo/toml) parser.
+Javascript implementation of a [TOML](https://github.com/mojombo/toml) parser. Browser-compatible.
 
 ### What is TOML?
 
