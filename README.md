@@ -18,3 +18,4 @@ Parser implementation for [TOML](https://github.com/mojombo/toml).
 ### Todo
 
 - nested lists
+- multiline arrays
