@@ -1,6 +1,6 @@
 isNumeric = (n) -> not isNaN parseInt(n, 10)
 
-module.exports = (input) ->
+toml = (input) ->
 
     root = {}
     context = root
@@ -29,7 +29,7 @@ module.exports = (input) ->
         unless reg.test(char) then state = st; token = accum; accum = ''; yes
         else accum += char; no
 
-    for char, i in input.toString()
+    for char, i in input.toString() + "\n"
         continue if --skip > 0
 
         if not state and char in newlines then state = 'newline'
@@ -95,3 +95,8 @@ module.exports = (input) ->
         prev = char
 
     return root
+
+if typeof exports isnt 'undefined'
+    module.exports = toml
+else 
+    @toml = toml

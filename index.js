@@ -1,12 +1,12 @@
 (function() {
-  var isNumeric,
+  var isNumeric, toml,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   isNumeric = function(n) {
     return !isNaN(parseInt(n, 10));
   };
 
-  module.exports = function(input) {
+  toml = function(input) {
     var accum, char, context, count, delimiters, eat, group, i, ignore, key, list, newlines, part, prev, quotes, root, skip, state, token, value, values, whitespace, _i, _j, _len, _len1, _ref, _ref1, _ref2;
     root = {};
     context = root;
@@ -36,7 +36,7 @@
         return false;
       }
     };
-    _ref = input.toString();
+    _ref = input.toString() + "\n";
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       char = _ref[i];
       if (--skip > 0) {
@@ -152,5 +152,11 @@
     }
     return root;
   };
+
+  if (typeof exports !== 'undefined') {
+    module.exports = toml;
+  } else {
+    this.toml = toml;
+  }
 
 }).call(this);

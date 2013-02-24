@@ -30,3 +30,7 @@ expected =
 it 'should work', ->
 
     assert.equal JSON.stringify(toml doc), JSON.stringify(expected)
+
+it 'should always work', ->
+
+    assert.deepEqual toml("hello = 1\noi=true"), { hello: 1, oi: true }
