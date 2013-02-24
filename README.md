@@ -1,20 +1,55 @@
-TOML parser
-===========
+TOML.js
+=======
 
-Parser implementation for [TOML](https://github.com/mojombo/toml).
+Javascript implementation of a [TOML](https://github.com/mojombo/toml) parser.
 
-    npm install toml-parser
+### What is TOML?
 
-    toml(source)
+TOML is the drunken brainchild of Tom Prestom-Werner, a INI-inspired minimal alternative to YAML for configuration files.
 
-### Building
+    # This is a TOML document. Boom.
 
-`npm install && npm run-script watch`, see the `Cakefile`.
+    title = "TOML Example"
 
-### Tests
+    [owner]
+    name = "Tom Preston-Werner"
+    organization = "GitHub"
+    bio = "GitHub Cofounder & CEO\nLikes tater tots and beer."
+    dob = 1979-05-27T07:32:00Z # First class dates? Why not?
 
-`npm test` or `mocha`
+This becomes the object:
 
-### Todo
+    {
+        title: "TOML Example",
+        owner: {
+            name: "Tom Preston-Werner",
+            bio: "Github Cofounder & CEO\nLikes tater tots and beer.",
+            dob: [object Date]
+        }
+    }
 
-- nested lists
+Values are interpreted as `String`, `Number`, `Date`, `Array` and `Object` instances.
+
+### Install
+
+    npm install tomljs
+
+### Use
+
+    var fs   = require('fs')
+      , toml = require('toml2')
+      , file = fs.readFileSync('config.toml').toString()
+
+    var config = toml(file)
+
+### Build
+
+    git clone https://github.com/ricardobeat/toml.git
+    npm install
+    npm run-script watch
+
+See `Cakefile` for the build/watch tasks.
+
+### Test
+
+Run `npm test` or `mocha` on the root folder.
