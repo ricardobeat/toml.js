@@ -26,10 +26,15 @@ expected =
             ip: "10.0.0.2"
             dc: "eqdc10"
             hyper: long: nested: stuff: false: false
+    numbers:
+        mi_nus: -10
+        float: 0.877
+        log: -1.374
 
 it 'should work', ->
 
-    assert.equal JSON.stringify(toml doc), JSON.stringify(expected)
+    res = toml doc
+    assert.equal JSON.stringify(res), JSON.stringify(expected)
 
 it 'should always work', ->
 

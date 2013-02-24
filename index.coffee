@@ -30,6 +30,7 @@ toml = (input) ->
         else accum += char; no
 
     for char, i in input.toString() + "\n"
+        console.log char,state if toml.debug
         continue if --skip > 0
 
         if not state and char in newlines then state = 'newline'
@@ -69,14 +70,15 @@ toml = (input) ->
             if char is 'f' and input[i..i+4] is 'false' then value = false; skip = 4; state = null
 
             # Number
-            if (char is '-' or isNumeric char) then state = 'number'
+            if char is '-' then state = 'number'; accum = '-'; continue
+            if isNumeric char then state = 'number'
 
             # Array
             if char is '[' then list = []; continue
 
-        if state is 'string' and eat(char, /[^"']/)            then value = token.replace(/\\n/, "\n")
-        if state is 'number' and eat(char, /\d/, 'number_end') then value = +token
-        if state is 'date'   and eat(char, /[\d-:TZ]/)         then value = new Date(token)
+        if state is 'string' and eat(char, /[^"']/)               then value = token.replace(/\\n/, "\n")
+        if state is 'number' and eat(char, /[\d.]/, 'number_end') then value = +token
+        if state is 'date'   and eat(char, /[\d-:TZ]/)            then value = new Date(token)
 
         # Date literal
         if state is 'number_end'

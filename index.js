@@ -39,6 +39,9 @@
     _ref = input.toString() + "\n";
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       char = _ref[i];
+      if (toml.debug) {
+        console.log(char, state);
+      }
       if (--skip > 0) {
         continue;
       }
@@ -103,7 +106,12 @@
           skip = 4;
           state = null;
         }
-        if (char === '-' || isNumeric(char)) {
+        if (char === '-') {
+          state = 'number';
+          accum = '-';
+          continue;
+        }
+        if (isNumeric(char)) {
           state = 'number';
         }
         if (char === '[') {
@@ -114,7 +122,7 @@
       if (state === 'string' && eat(char, /[^"']/)) {
         value = token.replace(/\\n/, "\n");
       }
-      if (state === 'number' && eat(char, /\d/, 'number_end')) {
+      if (state === 'number' && eat(char, /[\d.]/, 'number_end')) {
         value = +token;
       }
       if (state === 'date' && eat(char, /[\d-:TZ]/)) {
