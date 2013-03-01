@@ -43,6 +43,16 @@ expected =
         ]
     escaped:
         string: "I'm a string. \"You can quote me\". Tab \t newline \n you get it."
+    the:
+        test_string: "You'll hate me after this - #"
+        hard:
+            test_array: [ "] ", " # "]
+            test_array2: [ "Test #11 ]proved that", "Experiment #9 was a success" ]
+            another_test_string: " Same thing, but with a string #"
+            harder_test_string: " And when \"'s are in the string, along with # \""
+            'bit#':
+                "what?": "You don't think some user won't do that?"
+                multi_line_array: ["]"]
 
 it.only 'should work', ->
 

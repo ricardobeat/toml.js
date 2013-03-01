@@ -43,11 +43,14 @@ toml = (input) ->
 
         console.log char, state if toml.debug
 
+        # Ignore idle states, reset `state`
+        if state?.slice(-4) is '_end' then state = null
+
         if not state and char in newlines then state = 'newline'
 
         # Strip comments
-        if char is '#' then state = 'comment'
-        if state is 'comment' 
+        if state in ignore and char is '#' then state = 'comment'
+        if state is 'comment'
             if char not in newlines then continue else state = 'newline'
 
         # Strip whitespace
@@ -56,7 +59,7 @@ toml = (input) ->
 
         # Group
         if state in ignore and char is '[' then state = 'group'; continue
-        if state is 'group' and eat(char, /[\w.]/) then group = token
+        if state is 'group' and eat(char, /[^\]]/) then group = token
 
         # Nested groups
         if group
@@ -66,7 +69,7 @@ toml = (input) ->
 
         # Keys
         if state in ignore and /\w/.test(char) then state = 'key'
-        if state is 'key' and eat(char, /[\w-_]/) then key = token
+        if state is 'key' and eat(char, /[^=]/) then key = token.trim()
 
         # Values
         if key and char is '=' then state = 'expect_value'; continue
@@ -103,7 +106,7 @@ toml = (input) ->
         if list? # Capture values
             if value? then list.push(value); value = null; state = 'expect_value'
             if char is ',' then continue
-            if char is ']'
+            if char is ']' and state not in values
                 if nesting is 0 then value = list; list = null; nesting = -1; state = null
                 if nesting > 0 then lists[--nesting].push list; list = lists[nesting]
 

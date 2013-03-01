@@ -53,10 +53,13 @@
       if (toml.debug) {
         console.log(char, state);
       }
+      if ((state != null ? state.slice(-4) : void 0) === '_end') {
+        state = null;
+      }
       if (!state && __indexOf.call(newlines, char) >= 0) {
         state = 'newline';
       }
-      if (char === '#') {
+      if (__indexOf.call(ignore, state) >= 0 && char === '#') {
         state = 'comment';
       }
       if (state === 'comment') {
@@ -77,7 +80,7 @@
         state = 'group';
         continue;
       }
-      if (state === 'group' && eat(char, /[\w.]/)) {
+      if (state === 'group' && eat(char, /[^\]]/)) {
         group = token;
       }
       if (group) {
@@ -92,8 +95,8 @@
       if (__indexOf.call(ignore, state) >= 0 && /\w/.test(char)) {
         state = 'key';
       }
-      if (state === 'key' && eat(char, /[\w-_]/)) {
-        key = token;
+      if (state === 'key' && eat(char, /[^=]/)) {
+        key = token.trim();
       }
       if (key && char === '=') {
         state = 'expect_value';
@@ -165,7 +168,7 @@
         if (char === ',') {
           continue;
         }
-        if (char === ']') {
+        if (char === ']' && __indexOf.call(values, state) < 0) {
           if (nesting === 0) {
             value = list;
             list = null;
