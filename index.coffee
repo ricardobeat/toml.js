@@ -6,20 +6,20 @@ unescape = (str) ->
         .replace('\\t', "\t")
         .replace(/\\(["'])/, "$1")
 
+newlines   = "\n\r"
+whitespace = "\t "
+delimiters = "[].="
+quotes     = "\"'"
+
+ignore = [null, 'newline', 'whitespace']
+values = ['number', 'string', 'date']
+
 toml = (input) ->
 
     root = {}
     context = root
 
-    newlines   = "\n\r"
-    whitespace = "\t "
-    delimiters = "[].="
-    quotes     = "\"'"
-
     state  = null
-    ignore = [null, 'newline', 'whitespace']
-    values = ['number', 'string', 'date']
-    count  = 0
     skip   = 0
 
     accum = ''
@@ -32,7 +32,6 @@ toml = (input) ->
     nesting = -1
 
     quote = null
-
     prev = null
 
     eat = (char, reg, st) ->

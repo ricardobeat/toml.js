@@ -1,27 +1,28 @@
 (function() {
-  var isNumeric, toml, unescape,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
+  var delimiters, ignore, isNumeric, newlines, quotes, toml, unescape, values, whitespace;
+  var __indexOf = Array.prototype.indexOf || function(item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (this[i] === item) return i;
+    }
+    return -1;
+  };
   isNumeric = function(n) {
     return !isNaN(parseInt(n, 10));
   };
-
   unescape = function(str) {
     return str.replace('\\n', "\n").replace('\\t', "\t").replace(/\\(["'])/, "$1");
   };
-
+  newlines = "\n\r";
+  whitespace = "\t ";
+  delimiters = "[].=";
+  quotes = "\"'";
+  ignore = [null, 'newline', 'whitespace'];
+  values = ['number', 'string', 'date'];
   toml = function(input) {
-    var accum, char, context, count, delimiters, eat, group, i, ignore, key, list, lists, nesting, newlines, part, prev, quote, quotes, root, skip, state, token, value, values, whitespace, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+    var accum, char, context, eat, group, i, key, list, lists, nesting, part, prev, quote, root, skip, state, token, value, _i, _len, _len2, _ref, _ref2, _ref3;
     root = {};
     context = root;
-    newlines = "\n\r";
-    whitespace = "\t ";
-    delimiters = "[].=";
-    quotes = "\"'";
     state = null;
-    ignore = [null, 'newline', 'whitespace'];
-    values = ['number', 'string', 'date'];
-    count = 0;
     skip = 0;
     accum = '';
     token = null;
@@ -44,7 +45,7 @@
       }
     };
     _ref = input.toString() + "\n";
-    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+    for (i = 0, _len = _ref.length; i < _len; i++) {
       char = _ref[i];
       if (--skip > 0) {
         continue;
@@ -81,10 +82,10 @@
       }
       if (group) {
         context = root;
-        _ref1 = group.split('.');
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          part = _ref1[_j];
-          context = (_ref2 = context[part]) != null ? _ref2 : context[part] = {};
+        _ref2 = group.split('.');
+        for (_i = 0, _len2 = _ref2.length; _i < _len2; _i++) {
+          part = _ref2[_i];
+          context = (_ref3 = context[part]) != null ? _ref3 : context[part] = {};
         }
         group = null;
       }
@@ -104,12 +105,12 @@
           quote = char;
           continue;
         }
-        if (char === 't' && input.slice(i, +(i + 3) + 1 || 9e9) === 'true') {
+        if (char === 't' && input.slice(i, (i + 3 + 1) || 9e9) === 'true') {
           value = true;
           skip = 4;
           state = null;
         }
-        if (char === 'f' && input.slice(i, +(i + 4) + 1 || 9e9) === 'false') {
+        if (char === 'f' && input.slice(i, (i + 4 + 1) || 9e9) === 'false') {
           value = false;
           skip = 5;
           state = null;
@@ -185,11 +186,9 @@
     }
     return root;
   };
-
   if (typeof exports !== 'undefined') {
     module.exports = toml;
   } else {
     this.toml = toml;
   }
-
 }).call(this);
