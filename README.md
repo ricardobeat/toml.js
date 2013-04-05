@@ -5,7 +5,7 @@ Javascript implementation of a [TOML](https://github.com/mojombo/toml) parser. B
 
 ### What is TOML?
 
-TOML is the drunken brainchild of Tom Prestom-Werner, a INI-inspired minimal alternative to YAML for configuration files.
+TOML is the drunken brainchild of Tom Preston-Werner, a INI-inspired minimal alternative to YAML for configuration files.
 
     # This is a TOML document. Boom.
 
