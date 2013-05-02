@@ -3,6 +3,8 @@ TOML.js
 
 Javascript implementation of a [TOML](https://github.com/mojombo/toml) parser. Browser-compatible.
 
+Supports TOML v0.1, although the parser is more forgiving than the spec.
+
 ### What is TOML?
 
 TOML is the drunken brainchild of Tom Preston-Werner, a INI-inspired minimal alternative to YAML for configuration files.
