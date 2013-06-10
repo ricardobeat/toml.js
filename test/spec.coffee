@@ -25,6 +25,7 @@ expected =
         beta:
             ip: "10.0.0.2"
             dc: "eqdc10"
+            country: "中国"
             hyper: long: nested: stuff: false: false
     numbers:
         mi_nus: -10

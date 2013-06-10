@@ -25,6 +25,7 @@ enabled = true
   [servers.beta]
   ip = "10.0.0.2"
   dc = "eqdc10"
+  country = "中国" # This should be parsed as UTF-8
 
   [servers.beta.hyper.long.nested.stuff]
   false = false
