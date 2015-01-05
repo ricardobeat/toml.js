@@ -46,7 +46,7 @@ Values are interpreted as `String`, `Number`, `Date`, `Array` and `Object` insta
 
 ### Build
 
-    git clone https://github.com/ricardobeat/toml.git
+    git clone https://github.com/ricardobeat/toml.js.git
     npm install
     npm run-script watch
 
