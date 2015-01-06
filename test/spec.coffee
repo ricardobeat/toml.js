@@ -54,6 +54,23 @@ expected =
             'bit#':
                 "what?": "You don't think some user won't do that?"
                 multi_line_array: ["]"]
+    fruit: [
+        {
+            name: 'apple'
+            physical:
+                color: 'red'
+                shape: 'round'
+            variety: [
+                { name: 'red delicious' }
+                { name: 'granny smith' }
+            ]
+        }
+        {
+            name: 'banana'
+            variety:
+                name: 'plantain'
+        }
+    ]
 
 it.only 'should work', ->
 

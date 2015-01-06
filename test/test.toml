@@ -74,4 +74,22 @@ test_string = "You'll hate me after this - #"          # " Annoying, isn't it?
             "]",
             # ] Oh yes I did
             ]
-            
+
+[[fruit]]
+  name = "apple"
+
+  [fruit.physical]
+    color = "red"
+    shape = "round"
+
+  [[fruit.variety]]
+    name = "red delicious"
+
+  [[fruit.variety]]
+    name = "granny smith"
+
+[[fruit]]
+  name = "banana"
+
+  [[fruit.variety]]
+    name = "plantain"
